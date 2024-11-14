@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { Goal } from '../types';
@@ -9,21 +9,31 @@ interface GoalCardProps {
 }
 
 const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate }) => {
-  const progress = (goal.current / goal.target) * 100;
+  const [currentValue, setCurrentValue] = useState(goal.current);
+  const progress = (currentValue / goal.target) * 100;
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const handleIncrement = () => {
-    onUpdate(goal.id, Math.min(goal.current + 1, goal.target * 1.5));
+    setCurrentValue((prevValue) => Math.min(prevValue + 1, goal.target * 1.5));
   };
 
   const handleDecrement = () => {
-    if (goal.current > 0) {
-      onUpdate(goal.id, goal.current - 1);
-    }
+    setCurrentValue((prevValue) => Math.max(prevValue - 1, 0));
   };
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onUpdate(goal.id, Number(e.target.value));
+    setCurrentValue(Number(e.target.value));
   };
+
+  useEffect(() => {
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      onUpdate(goal.id, currentValue);
+    }, 500); // Adjust the debounce delay as needed
+    return () => {
+      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    };
+  }, [currentValue, goal.id, onUpdate]);
 
   return (
     <motion.div
@@ -33,7 +43,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate }) => {
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">{goal.name}</h3>
         <span className="text-sm text-gray-500">
-          {goal.current} / {goal.target} {goal.unit}
+          {currentValue} / {goal.target} {goal.unit}
         </span>
       </div>
 
@@ -49,7 +59,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate }) => {
           type="range"
           min="0"
           max={goal.target * 1.5}
-          value={goal.current}
+          value={currentValue}
           onChange={handleSliderChange}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
         />
@@ -74,3 +84,4 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate }) => {
 };
 
 export default GoalCard;
+
