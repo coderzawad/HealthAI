@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -27,7 +27,8 @@ interface GoalProgressProps {
 }
 
 const GoalProgress: React.FC<GoalProgressProps> = ({ goal }) => {
-  const data = {
+  // Memoize data to prevent recalculation on each render
+  const data = useMemo(() => ({
     labels: goal.history.map(h => new Date(h.date).toLocaleDateString()),
     datasets: [
       {
@@ -38,9 +39,10 @@ const GoalProgress: React.FC<GoalProgressProps> = ({ goal }) => {
         tension: 0.4
       }
     ]
-  };
+  }), [goal]);
 
-  const options = {
+  // Memoize options for performance
+  const options = useMemo(() => ({
     responsive: true,
     plugins: {
       legend: {
@@ -57,7 +59,12 @@ const GoalProgress: React.FC<GoalProgressProps> = ({ goal }) => {
         max: Math.max(goal.target, ...goal.history.map(h => h.value)) * 1.2
       }
     }
-  };
+  }), [goal]);
+
+  // Show message if no history data is available
+  if (!goal.history.length) {
+    return <p className="text-gray-500">No progress data available for this goal.</p>;
+  }
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-lg">
@@ -67,3 +74,4 @@ const GoalProgress: React.FC<GoalProgressProps> = ({ goal }) => {
 };
 
 export default GoalProgress;
+

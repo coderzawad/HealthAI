@@ -11,65 +11,52 @@ const defaultGoals: Goal[] = [
     id: '1',
     name: 'Daily Steps',
     target: 10000,
-    current: 8432,
+    current: 1,
     unit: 'steps',
     category: 'fitness',
     history: [
-      { date: '2024-03-01', value: 8000 },
-      { date: '2024-03-02', value: 9200 },
-      { date: '2024-03-03', value: 8432 }
     ]
   },
   {
     id: '2',
     name: 'Water Intake',
     target: 8,
-    current: 6,
+    current: 1,
     unit: 'L',
     category: 'water',
     history: [
-      { date: '2024-03-01', value: 5 },
-      { date: '2024-03-02', value: 7 },
-      { date: '2024-03-03', value: 6 }
     ]
   },
   {
     id: '3',
     name: 'Sleep Duration',
     target: 8,
-    current: 7.5,
+    current: 1,
     unit: 'hours',
     category: 'sleep',
     history: [
-      { date: '2024-03-01', value: 7 },
-      { date: '2024-03-02', value: 8 },
-      { date: '2024-03-03', value: 7.5 }
+   
     ]
   },
   {
     id: '4',
     name: 'Calorie Intake',
     target: 2000,
-    current: 1850,
+    current: 1,
     unit: 'kcal',
     category: 'nutrition',
     history: [
-      { date: '2024-03-01', value: 1900 },
-      { date: '2024-03-02', value: 1800 },
-      { date: '2024-03-03', value: 1850 }
+    
     ]
   },
   {
     id: '5',
     name: 'Protein Intake',
     target: 120,
-    current: 90,
+    current: 1,
     unit: 'g',
     category: 'nutrition',
     history: [
-      { date: '2024-03-01', value: 85 },
-      { date: '2024-03-02', value: 95 },
-      { date: '2024-03-03', value: 90 }
     ]
   }
 ];

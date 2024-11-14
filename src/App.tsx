@@ -15,7 +15,8 @@ const sampleWorkouts: WorkoutPlan[] = [
     exercises: [
       { name: 'Push-ups', sets: 3, reps: 12 },
       { name: 'Squats', sets: 3, reps: 15 },
-      { name: 'Dumbbell Rows', sets: 3, reps: 12 }
+      { name: 'Dumbbell Rows', sets: 3, reps: 12 },
+      { name: 'Plank', sets: 3, reps: 60 } // seconds
     ]
   },
   {
@@ -26,10 +27,84 @@ const sampleWorkouts: WorkoutPlan[] = [
     exercises: [
       { name: 'Burpees', sets: 4, reps: 10 },
       { name: 'Mountain Climbers', sets: 4, reps: 20 },
-      { name: 'Jump Squats', sets: 4, reps: 15 }
+      { name: 'Jump Squats', sets: 4, reps: 15 },
+      { name: 'High Knees', sets: 4, reps: 30 } // seconds
+    ]
+  },
+  {
+    id: '3',
+    name: 'Upper Body Blast',
+    duration: 40,
+    calories: 350,
+    exercises: [
+      { name: 'Bench Press', sets: 3, reps: 10 },
+      { name: 'Bicep Curls', sets: 3, reps: 12 },
+      { name: 'Tricep Dips', sets: 3, reps: 15 },
+      { name: 'Shoulder Press', sets: 3, reps: 10 }
+    ]
+  },
+  {
+    id: '4',
+    name: 'Lower Body Power',
+    duration: 50,
+    calories: 450,
+    exercises: [
+      { name: 'Deadlifts', sets: 4, reps: 10 },
+      { name: 'Lunges', sets: 3, reps: 12 },
+      { name: 'Leg Press', sets: 4, reps: 10 },
+      { name: 'Calf Raises', sets: 4, reps: 15 }
+    ]
+  },
+  {
+    id: '5',
+    name: 'Core and Abs',
+    duration: 20,
+    calories: 200,
+    exercises: [
+      { name: 'Crunches', sets: 3, reps: 20 },
+      { name: 'Russian Twists', sets: 3, reps: 20 },
+      { name: 'Leg Raises', sets: 3, reps: 15 },
+      { name: 'Bicycle Kicks', sets: 3, reps: 30 } // seconds
+    ]
+  },
+  {
+    id: '6',
+    name: 'Flexibility and Mobility',
+    duration: 25,
+    calories: 150,
+    exercises: [
+      { name: 'Forward Fold', sets: 2, reps: 60 }, // seconds
+      { name: 'Lunging Hip Flexor Stretch', sets: 2, reps: 60 },
+      { name: 'Cat-Cow Stretch', sets: 3, reps: 30 }, // seconds
+      { name: 'Child’s Pose', sets: 2, reps: 60 } // seconds
+    ]
+  },
+  {
+    id: '7',
+    name: 'Endurance Circuit',
+    duration: 35,
+    calories: 320,
+    exercises: [
+      { name: 'Jump Rope', sets: 3, reps: 60 }, // seconds
+      { name: 'Box Jumps', sets: 3, reps: 15 },
+      { name: 'Kettlebell Swings', sets: 3, reps: 20 },
+      { name: 'Battle Ropes', sets: 3, reps: 30 } // seconds
+    ]
+  },
+  {
+    id: '8',
+    name: 'Leg Day Extreme',
+    duration: 55,
+    calories: 500,
+    exercises: [
+      { name: 'Squats', sets: 4, reps: 15 },
+      { name: 'Bulgarian Split Squats', sets: 3, reps: 12 },
+      { name: 'Hamstring Curls', sets: 3, reps: 15 },
+      { name: 'Leg Extensions', sets: 3, reps: 12 }
     ]
   }
 ];
+
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
