@@ -84,4 +84,3 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate }) => {
 };
 
 export default GoalCard;
-

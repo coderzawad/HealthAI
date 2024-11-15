@@ -3,15 +3,17 @@ import { motion } from 'framer-motion';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Activity, Droplet, Moon } from 'lucide-react';
-import { DailyStats } from '../types';
+import { DailyStats, Goal } from '../types';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const Dashboard: React.FC = () => {
-  const stats: DailyStats = {
-    steps: 8432,
-    calories: 1850,
-    water: 6,
-    sleep: 7.5
-  };
+  const [goals] = useLocalStorage<Goal[]>('fitness-goals', []);
+
+  // Find the relevant goals
+  const stepsGoal = goals.find(g => g.name === 'Daily Steps');
+  const waterGoal = goals.find(g => g.name === 'Water Intake');
+  const sleepGoal = goals.find(g => g.name === 'Sleep Duration');
+  const caloriesGoal = goals.find(g => g.name === 'Calorie Intake');
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -44,8 +46,8 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="w-32 h-32 mx-auto">
           <CircularProgressbar
-            value={(stats.steps / 10000) * 100}
-            text={`${stats.steps}`}
+            value={(stepsGoal?.current || 0) / (stepsGoal?.target || 10000) * 100}
+            text={`${stepsGoal?.current || 0}`}
             styles={buildStyles({
               pathColor: '#3B82F6',
               textColor: '#1F2937',
@@ -53,7 +55,7 @@ const Dashboard: React.FC = () => {
             })}
           />
         </div>
-        <p className="text-center mt-4 text-gray-600">Goal: 10,000</p>
+        <p className="text-center mt-4 text-gray-600">Goal: {stepsGoal?.target || 10000}</p>
       </motion.div>
 
       <motion.div variants={itemVariants} className="bg-white rounded-xl p-6 shadow-lg">
@@ -63,8 +65,8 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="w-32 h-32 mx-auto">
           <CircularProgressbar
-            value={(stats.water / 8) * 100}
-            text={`${stats.water}L`}
+            value={(waterGoal?.current || 0) / (waterGoal?.target || 8) * 100}
+            text={`${waterGoal?.current || 0}L`}
             styles={buildStyles({
               pathColor: '#60A5FA',
               textColor: '#1F2937',
@@ -72,7 +74,7 @@ const Dashboard: React.FC = () => {
             })}
           />
         </div>
-        <p className="text-center mt-4 text-gray-600">Goal: 8L</p>
+        <p className="text-center mt-4 text-gray-600">Goal: {waterGoal?.target || 8}L</p>
       </motion.div>
 
       <motion.div variants={itemVariants} className="bg-white rounded-xl p-6 shadow-lg">
@@ -82,8 +84,8 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="w-32 h-32 mx-auto">
           <CircularProgressbar
-            value={(stats.sleep / 8) * 100}
-            text={`${stats.sleep}h`}
+            value={(sleepGoal?.current || 0) / (sleepGoal?.target || 8) * 100}
+            text={`${sleepGoal?.current || 0}h`}
             styles={buildStyles({
               pathColor: '#6366F1',
               textColor: '#1F2937',
@@ -91,7 +93,7 @@ const Dashboard: React.FC = () => {
             })}
           />
         </div>
-        <p className="text-center mt-4 text-gray-600">Goal: 8h</p>
+        <p className="text-center mt-4 text-gray-600">Goal: {sleepGoal?.target || 8}h</p>
       </motion.div>
 
       <motion.div variants={itemVariants} className="bg-white rounded-xl p-6 shadow-lg">
@@ -101,8 +103,8 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="w-32 h-32 mx-auto">
           <CircularProgressbar
-            value={(stats.calories / 2000) * 100}
-            text={`${stats.calories}`}
+            value={(caloriesGoal?.current || 0) / (caloriesGoal?.target || 2000) * 100}
+            text={`${caloriesGoal?.current || 0}`}
             styles={buildStyles({
               pathColor: '#10B981',
               textColor: '#1F2937',
@@ -110,7 +112,7 @@ const Dashboard: React.FC = () => {
             })}
           />
         </div>
-        <p className="text-center mt-4 text-gray-600">Goal: 2000</p>
+        <p className="text-center mt-4 text-gray-600">Goal: {caloriesGoal?.target || 2000}</p>
       </motion.div>
     </motion.div>
   );
