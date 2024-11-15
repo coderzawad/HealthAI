@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Heart, BarChart3, Activity, Moon } from 'lucide-react';
 import Dashboard from './components/Dashboard';
+import WorkoutCard from './components/WorkoutCard';
 import GoalsManager from './components/GoalsManager';
+import NutritionTracker from './components/NutritionTracker';
+import { WorkoutPlan } from './types';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -24,6 +27,7 @@ function App() {
             </div>
             <div className="flex items-center space-x-4">
               {tabs.map((tab) => {
+                const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
@@ -46,12 +50,7 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 py-6">
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'activity' && <GoalsManager />}
-        {activeTab === 'nutrition' && (
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-2xl font-semibold mb-4">Nutrition Tracking</h2>
-            <p className="text-gray-600">Coming soon...</p>
-          </div>
-        )}
+        {activeTab === 'nutrition' && <NutritionTracker />}
         {activeTab === 'sleep' && (
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h2 className="text-2xl font-semibold mb-4">Sleep Analytics</h2>
