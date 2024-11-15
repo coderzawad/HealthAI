@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Heart, BarChart3, Activity, Moon } from 'lucide-react';
 import Dashboard from './components/Dashboard';
-import WorkoutCard from './components/WorkoutCard';
 import GoalsManager from './components/GoalsManager';
-import { WorkoutPlan } from './types';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -26,7 +24,6 @@ function App() {
             </div>
             <div className="flex items-center space-x-4">
               {tabs.map((tab) => {
-                const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
