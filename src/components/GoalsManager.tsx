@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { Goal } from '../types';
 import GoalCard from './GoalCard';
 import GoalProgress from './GoalProgress';
+import AddGoalModal from './AddGoalModal';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const defaultGoals: Goal[] = [
@@ -14,8 +15,7 @@ const defaultGoals: Goal[] = [
     current: 1,
     unit: 'steps',
     category: 'fitness',
-    history: [
-    ]
+    history: []
   },
   {
     id: '2',
@@ -24,8 +24,7 @@ const defaultGoals: Goal[] = [
     current: 1,
     unit: 'L',
     category: 'water',
-    history: [
-    ]
+    history: []
   },
   {
     id: '3',
@@ -34,9 +33,7 @@ const defaultGoals: Goal[] = [
     current: 1,
     unit: 'hours',
     category: 'sleep',
-    history: [
-   
-    ]
+    history: []
   },
   {
     id: '4',
@@ -45,9 +42,7 @@ const defaultGoals: Goal[] = [
     current: 1,
     unit: 'kcal',
     category: 'nutrition',
-    history: [
-    
-    ]
+    history: []
   },
   {
     id: '5',
@@ -56,8 +51,7 @@ const defaultGoals: Goal[] = [
     current: 1,
     unit: 'g',
     category: 'nutrition',
-    history: [
-    ]
+    history: []
   }
 ];
 
@@ -65,6 +59,7 @@ const GoalsManager: React.FC = () => {
   const [goals, setGoals] = useLocalStorage<Goal[]>('fitness-goals', defaultGoals);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(goals[0]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const categories = [
     { id: 'all', label: 'All Goals' },
@@ -94,6 +89,17 @@ const GoalsManager: React.FC = () => {
     });
   };
 
+  const handleAddGoal = (newGoal: Omit<Goal, 'id' | 'history'>) => {
+    const goal: Goal = {
+      ...newGoal,
+      id: Date.now().toString(),
+      history: []
+    };
+    
+    setGoals(prevGoals => [...prevGoals, goal]);
+    setSelectedGoal(goal);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -101,6 +107,7 @@ const GoalsManager: React.FC = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => setIsAddModalOpen(true)}
           className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg"
         >
           <Plus className="w-5 h-5" />
@@ -152,6 +159,15 @@ const GoalsManager: React.FC = () => {
         </div>
         {selectedGoal && <GoalProgress goal={selectedGoal} />}
       </div>
+
+      <AnimatePresence>
+        {isAddModalOpen && (
+          <AddGoalModal
+            onClose={() => setIsAddModalOpen(false)}
+            onAdd={handleAddGoal}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

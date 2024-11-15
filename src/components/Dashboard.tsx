@@ -1,120 +1,84 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
-import { Activity, Droplet, Moon } from 'lucide-react';
-import { DailyStats, Goal } from '../types';
+import { Activity, Clock, Flame, Moon } from 'lucide-react';
+import { Goal } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import WeeklyActivity from './WeeklyActivity';
+import TodaysGoals from './TodaysGoals';
+
+const StatCard = ({ icon: Icon, label, value, unit, color }: {
+  icon: any;
+  label: string;
+  value: string | number;
+  unit?: string;
+  color: string;
+}) => (
+  <div className="bg-white rounded-2xl p-6 shadow-sm">
+    <div className="flex items-center gap-4">
+      <div className={`p-3 rounded-full ${color}`}>
+        <Icon className="w-6 h-6 text-white" />
+      </div>
+      <div>
+        <p className="text-sm text-gray-600">{label}</p>
+        <p className="text-2xl font-semibold">
+          {value}
+          {unit && <span className="text-gray-500 text-lg ml-1">{unit}</span>}
+        </p>
+      </div>
+    </div>
+  </div>
+);
 
 const Dashboard: React.FC = () => {
   const [goals] = useLocalStorage<Goal[]>('fitness-goals', []);
 
-  // Find the relevant goals
-  const stepsGoal = goals.find(g => g.name === 'Daily Steps');
-  const waterGoal = goals.find(g => g.name === 'Water Intake');
-  const sleepGoal = goals.find(g => g.name === 'Sleep Duration');
-  const caloriesGoal = goals.find(g => g.name === 'Calorie Intake');
-
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
-      }
-    }
+  const getGoalByName = (name: string) => {
+    return goals.find(g => g.name === name);
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
+  const stepsGoal = getGoalByName('Daily Steps');
+  const activeMinutes = getGoalByName('Active Minutes');
+  const calories = getGoalByName('Calorie Intake');
+  const sleep = getGoalByName('Sleep Duration');
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6"
-    >
-      <motion.div variants={itemVariants} className="bg-white rounded-xl p-6 shadow-lg">
-        <div className="flex items-center justify-between mb-4">
-          <Activity className="w-6 h-6 text-blue-500" />
-          <h3 className="text-lg font-semibold">Steps</h3>
-        </div>
-        <div className="w-32 h-32 mx-auto">
-          <CircularProgressbar
-            value={(stepsGoal?.current || 0) / (stepsGoal?.target || 10000) * 100}
-            text={`${stepsGoal?.current || 0}`}
-            styles={buildStyles({
-              pathColor: '#3B82F6',
-              textColor: '#1F2937',
-              trailColor: '#E5E7EB'
-            })}
-          />
-        </div>
-        <p className="text-center mt-4 text-gray-600">Goal: {stepsGoal?.target || 10000}</p>
-      </motion.div>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          icon={Activity}
+          label="Daily Steps"
+          value={stepsGoal?.current || 0}
+          color="bg-blue-500"
+        />
+        <StatCard
+          icon={Clock}
+          label="Active Minutes"
+          value={activeMinutes?.current || 0}
+          unit="mins"
+          color="bg-green-500"
+        />
+        <StatCard
+          icon={Flame}
+          label="Calories"
+          value={`${calories?.current || 0} / ${calories?.target || 2200}`}
+          color="bg-orange-500"
+        />
+        <StatCard
+          icon={Moon}
+          label="Sleep Score"
+          value={`${Math.round((sleep?.current || 0) / (sleep?.target || 8) * 100)}%`}
+          color="bg-purple-500"
+        />
+      </div>
 
-      <motion.div variants={itemVariants} className="bg-white rounded-xl p-6 shadow-lg">
-        <div className="flex items-center justify-between mb-4">
-          <Droplet className="w-6 h-6 text-blue-500" />
-          <h3 className="text-lg font-semibold">Water</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <WeeklyActivity />
         </div>
-        <div className="w-32 h-32 mx-auto">
-          <CircularProgressbar
-            value={(waterGoal?.current || 0) / (waterGoal?.target || 8) * 100}
-            text={`${waterGoal?.current || 0}L`}
-            styles={buildStyles({
-              pathColor: '#60A5FA',
-              textColor: '#1F2937',
-              trailColor: '#E5E7EB'
-            })}
-          />
+        <div>
+          <TodaysGoals goals={goals} />
         </div>
-        <p className="text-center mt-4 text-gray-600">Goal: {waterGoal?.target || 8}L</p>
-      </motion.div>
-
-      <motion.div variants={itemVariants} className="bg-white rounded-xl p-6 shadow-lg">
-        <div className="flex items-center justify-between mb-4">
-          <Moon className="w-6 h-6 text-indigo-500" />
-          <h3 className="text-lg font-semibold">Sleep</h3>
-        </div>
-        <div className="w-32 h-32 mx-auto">
-          <CircularProgressbar
-            value={(sleepGoal?.current || 0) / (sleepGoal?.target || 8) * 100}
-            text={`${sleepGoal?.current || 0}h`}
-            styles={buildStyles({
-              pathColor: '#6366F1',
-              textColor: '#1F2937',
-              trailColor: '#E5E7EB'
-            })}
-          />
-        </div>
-        <p className="text-center mt-4 text-gray-600">Goal: {sleepGoal?.target || 8}h</p>
-      </motion.div>
-
-      <motion.div variants={itemVariants} className="bg-white rounded-xl p-6 shadow-lg">
-        <div className="flex items-center justify-between mb-4">
-          <Activity className="w-6 h-6 text-green-500" />
-          <h3 className="text-lg font-semibold">Calories</h3>
-        </div>
-        <div className="w-32 h-32 mx-auto">
-          <CircularProgressbar
-            value={(caloriesGoal?.current || 0) / (caloriesGoal?.target || 2000) * 100}
-            text={`${caloriesGoal?.current || 0}`}
-            styles={buildStyles({
-              pathColor: '#10B981',
-              textColor: '#1F2937',
-              trailColor: '#E5E7EB'
-            })}
-          />
-        </div>
-        <p className="text-center mt-4 text-gray-600">Goal: {caloriesGoal?.target || 2000}</p>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
