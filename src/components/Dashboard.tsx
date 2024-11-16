@@ -1,9 +1,25 @@
 import React from 'react';
 import { Activity, Clock, Flame, Moon } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Goal } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import WeeklyActivity from './WeeklyActivity';
 import TodaysGoals from './TodaysGoals';
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
 
 const StatCard = ({ icon: Icon, label, value, unit, color }: {
   icon: any;
@@ -12,7 +28,11 @@ const StatCard = ({ icon: Icon, label, value, unit, color }: {
   unit?: string;
   color: string;
 }) => (
-  <div className="bg-white rounded-2xl p-6 shadow-sm">
+  <motion.div
+    variants={item}
+    whileHover={{ scale: 1.02 }}
+    className="bg-white rounded-2xl p-6 shadow-sm"
+  >
     <div className="flex items-center gap-4">
       <div className={`p-3 rounded-full ${color}`}>
         <Icon className="w-6 h-6 text-white" />
@@ -25,7 +45,7 @@ const StatCard = ({ icon: Icon, label, value, unit, color }: {
         </p>
       </div>
     </div>
-  </div>
+  </motion.div>
 );
 
 const Dashboard: React.FC = () => {
@@ -41,8 +61,16 @@ const Dashboard: React.FC = () => {
   const sleep = getGoalByName('Sleep Duration');
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-6"
+    >
+      <motion.div
+        variants={container}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
         <StatCard
           icon={Activity}
           label="Daily Steps"
@@ -68,17 +96,20 @@ const Dashboard: React.FC = () => {
           value={`${Math.round((sleep?.current || 0) / (sleep?.target || 8) * 100)}%`}
           color="bg-purple-500"
         />
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+        <motion.div
+          variants={item}
+          className="lg:col-span-2"
+        >
           <WeeklyActivity />
-        </div>
-        <div>
+        </motion.div>
+        <motion.div variants={item}>
           <TodaysGoals goals={goals} />
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
