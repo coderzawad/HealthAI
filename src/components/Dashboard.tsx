@@ -27,7 +27,7 @@ const defaultGoals: Goal[] = [
     id: '1',
     name: 'Daily Steps',
     target: 10000,
-    current: 1,
+    current: 0,
     unit: 'steps',
     category: 'fitness',
     history: []
@@ -36,7 +36,7 @@ const defaultGoals: Goal[] = [
     id: '2',
     name: 'Water Intake',
     target: 8,
-    current: 1,
+    current: 0,
     unit: 'L',
     category: 'water',
     history: []
@@ -45,7 +45,7 @@ const defaultGoals: Goal[] = [
     id: '3',
     name: 'Sleep Duration',
     target: 8,
-    current: 1,
+    current: 0,
     unit: 'hours',
     category: 'sleep',
     history: []
@@ -54,7 +54,7 @@ const defaultGoals: Goal[] = [
     id: '4',
     name: 'Calorie Intake',
     target: 2000,
-    current: 1,
+    current: 0,
     unit: 'kcal',
     category: 'nutrition',
     history: []
@@ -63,7 +63,7 @@ const defaultGoals: Goal[] = [
     id: '5',
     name: 'Protein Intake',
     target: 120,
-    current: 1,
+    current: 0,
     unit: 'g',
     category: 'nutrition',
     history: []
