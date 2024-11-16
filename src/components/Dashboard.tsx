@@ -21,6 +21,55 @@ const item = {
   show: { opacity: 1, y: 0 }
 };
 
+
+const defaultGoals: Goal[] = [
+  {
+    id: '1',
+    name: 'Daily Steps',
+    target: 10000,
+    current: 1,
+    unit: 'steps',
+    category: 'fitness',
+    history: []
+  },
+  {
+    id: '2',
+    name: 'Water Intake',
+    target: 8,
+    current: 1,
+    unit: 'L',
+    category: 'water',
+    history: []
+  },
+  {
+    id: '3',
+    name: 'Sleep Duration',
+    target: 8,
+    current: 1,
+    unit: 'hours',
+    category: 'sleep',
+    history: []
+  },
+  {
+    id: '4',
+    name: 'Calorie Intake',
+    target: 2000,
+    current: 1,
+    unit: 'kcal',
+    category: 'nutrition',
+    history: []
+  },
+  {
+    id: '5',
+    name: 'Protein Intake',
+    target: 120,
+    current: 1,
+    unit: 'g',
+    category: 'nutrition',
+    history: []
+  }
+];
+
 const StatCard = ({ icon: Icon, label, value, unit, color }: {
   icon: any;
   label: string;
@@ -49,7 +98,7 @@ const StatCard = ({ icon: Icon, label, value, unit, color }: {
 );
 
 const Dashboard: React.FC = () => {
-  const [goals] = useLocalStorage<Goal[]>('fitness-goals', []);
+  const [goals] = useLocalStorage<Goal[]>('fitness-goals', defaultGoals);
 
   const getGoalByName = (name: string) => {
     return goals.find(g => g.name === name);
